@@ -726,13 +726,13 @@ function showLogin() {
     const btnText = document.querySelector('#custom-login-btn .text');
     
     if (savedEmail) {
-        h2.innerHTML = '歡迎回來！ <span style="font-size:1.5rem">🍔</span>';
-        p.textContent = `安全憑證已自動更新，請繼續以 ${savedEmail} 進行點餐`;
-        btnText.textContent = '快速一鍵繼續';
+        h2.innerHTML = '貴客重臨！ <span style="font-size:1.5rem">🍵</span>';
+        p.textContent = `憑證紀錄尚存，請以 ${savedEmail} 繼續用膳`;
+        btnText.textContent = '一鍵持牌入內';
     } else {
-        h2.textContent = '請先登入';
-        p.textContent = '使用公司 Google 帳號登入以進行點餐';
-        btnText.textContent = '使用 Google 帳號登入';
+        h2.textContent = '客倌請留步';
+        p.textContent = '請出示通關玉牌（Google 帳號）以入內用膳';
+        btnText.textContent = '持玉牌入內';
     }
 }
 

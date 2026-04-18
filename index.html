@@ -78,6 +78,24 @@
     <div id="orders-modal" class="modal hidden">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
+            
+            <h2>📊 今日訂單統計</h2>
+            <div class="table-wrapper" style="margin-bottom: 30px;">
+                <table id="orders-summary-table">
+                    <thead>
+                        <tr>
+                            <th>餐廳</th>
+                            <th>品項</th>
+                            <th>數量</th>
+                            <th>小計</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-summary-list">
+                        <!-- JS 動態生成 -->
+                    </tbody>
+                </table>
+            </div>
+
             <h2>🧾 今日訂單列表</h2>
             <div class="table-wrapper">
                 <table id="orders-table">

@@ -529,29 +529,48 @@ async function clearOrders() {
 async function openOrdersModal() {
     const modal = document.getElementById('orders-modal');
     const tbody = document.getElementById('orders-list');
+    const summaryTbody = document.getElementById('orders-summary-list');
     const totalSpan = document.getElementById('total-amount');
 
     tbody.innerHTML = '<tr><td colspan="6">載入中...</td></tr>';
+    if (summaryTbody) summaryTbody.innerHTML = '<tr><td colspan="4">載入中...</td></tr>';
     modal.classList.remove('hidden');
 
     try {
         const response = await fetchGoogleSheets('get', `${SHEETS.ORDERS}!A2:F`);
         const rows = response.values || [];
         tbody.innerHTML = '';
+        if (summaryTbody) summaryTbody.innerHTML = '';
 
         if (rows.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6">目前沒有訂單。</td></tr>';
+            if (summaryTbody) summaryTbody.innerHTML = '<tr><td colspan="4">目前沒有訂單。</td></tr>';
             totalSpan.textContent = '0';
             return;
         }
 
         let total = 0;
+        const summary = {};
+
         rows.forEach(row => {
             // [時間, Email, 餐廳, 餐點, 金額, 備註]
             const tr = document.createElement('tr');
-            // 簡單過濾 html tag 防止 XSS (如果需要)
+            
+            const restaurant = row[2] || '未指定餐廳';
+            const food = row[3] || '未指定餐點';
             const price = parseInt(row[4]) || 0;
             total += price;
+
+            // 統計處理
+            if (!summary[restaurant]) {
+                summary[restaurant] = { totalAmount: 0, items: {} };
+            }
+            if (!summary[restaurant].items[food]) {
+                summary[restaurant].items[food] = { quantity: 0, amount: 0 };
+            }
+            summary[restaurant].items[food].quantity += 1;
+            summary[restaurant].items[food].amount += price;
+            summary[restaurant].totalAmount += price;
 
             tr.innerHTML = `
                 <td>${row[0]}</td>
@@ -564,11 +583,41 @@ async function openOrdersModal() {
             tbody.appendChild(tr);
         });
 
+        // 渲染統計列表
+        if (summaryTbody) {
+            for (const [restaurant, data] of Object.entries(summary)) {
+                let isFirstRow = true;
+                const itemsEntries = Object.entries(data.items);
+                const rowSpan = itemsEntries.length;
+
+                itemsEntries.forEach(([food, metrics]) => {
+                    const tr = document.createElement('tr');
+                    if (isFirstRow) {
+                        tr.innerHTML = `
+                            <td rowspan="${rowSpan}" style="vertical-align: middle;"><strong>${restaurant}</strong><br><small class="text-secondary">小計: $${data.totalAmount}</small></td>
+                            <td style="vertical-align: middle;">${food}</td>
+                            <td style="vertical-align: middle;">${metrics.quantity}</td>
+                            <td style="vertical-align: middle;">$${metrics.amount}</td>
+                        `;
+                        isFirstRow = false;
+                    } else {
+                        tr.innerHTML = `
+                            <td style="vertical-align: middle;">${food}</td>
+                            <td style="vertical-align: middle;">${metrics.quantity}</td>
+                            <td style="vertical-align: middle;">$${metrics.amount}</td>
+                        `;
+                    }
+                    summaryTbody.appendChild(tr);
+                });
+            }
+        }
+
         totalSpan.textContent = total;
 
     } catch (err) {
         console.error(err);
         tbody.innerHTML = '<tr><td colspan="6">載入失敗</td></tr>';
+        if (summaryTbody) summaryTbody.innerHTML = '<tr><td colspan="4">載入失敗</td></tr>';
     }
 }
 

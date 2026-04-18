@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('sign-out-btn').addEventListener('click', handleSignOut);
     document.getElementById('btn-save-config').addEventListener('click', saveTodayConfig);
     document.getElementById('btn-clear-orders').addEventListener('click', clearOrders);
+    document.getElementById('btn-add-menu-item').addEventListener('click', addNewMenuItem);
     document.getElementById('btn-show-orders').addEventListener('click', openOrdersModal);
     document.querySelector('.close-modal').addEventListener('click', closeOrdersModal);
     document.getElementById('btn-copy-orders').addEventListener('click', copyOrdersToClipboard);
@@ -512,14 +513,62 @@ async function saveTodayConfig() {
 }
 
 async function clearOrders() {
-    if (!confirm('⚠️ 警告：確定要清空今日所有訂單資料嗎？此動作無法復原！')) return;
+    if (!confirm('⚠️ 警告：確定要銷毀今日所有訂單資料嗎？此動作無法復原！')) return;
 
     try {
         await fetchGoogleSheets('clear', `${SHEETS.ORDERS}!A2:F`, 'POST');
-        alert('訂單已清空。');
+        alert('訂單已銷毀。');
     } catch (err) {
         console.error(err);
-        alert('清空失敗');
+        alert('銷毀失敗');
+    }
+}
+
+// --- 新增佳餚功能 ---
+async function addNewMenuItem() {
+    const restaurant = document.getElementById('new-menu-restaurant').value.trim();
+    const name = document.getElementById('new-menu-name').value.trim();
+    const priceStr = document.getElementById('new-menu-price').value.trim();
+    const category = document.getElementById('new-menu-category').value.trim();
+
+    if (!restaurant || !name || !priceStr) {
+        alert('請填寫完整的客棧名稱、佳餚名稱與耗費銀兩！');
+        return;
+    }
+
+    const price = parseInt(priceStr);
+    if (isNaN(price)) {
+        alert('銀兩格式有誤，請輸入數字！');
+        return;
+    }
+
+    const btn = document.getElementById('btn-add-menu-item');
+    btn.disabled = true;
+    btn.textContent = '登錄中...';
+
+    const rowData = [restaurant, name, price, category || ''];
+
+    try {
+        await fetchGoogleSheets('append', `${SHEETS.MENU}!A:D`, 'POST', {
+            values: [rowData]
+        });
+
+        alert(`成功將「${restaurant} - ${name}」登錄於帳冊中！`);
+        
+        // 清空欄位
+        document.getElementById('new-menu-restaurant').value = '';
+        document.getElementById('new-menu-name').value = '';
+        document.getElementById('new-menu-price').value = '';
+        document.getElementById('new-menu-category').value = '';
+
+        // 重新載入設定與畫面
+        await loadAppArgs();
+    } catch (err) {
+        console.error("Failed to add menu item:", err);
+        alert('登錄失敗，請檢查網路或聯繫掌櫃。');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '登錄新佳餚';
     }
 }
 

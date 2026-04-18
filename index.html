@@ -49,6 +49,23 @@
                 <div class="admin-controls">
                     <button id="btn-clear-orders" class="btn btn-danger">銷毀今日帳冊</button>
                 </div>
+
+                <hr style="border:0; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+                
+                <!-- 新增菜單區塊 -->
+                <div id="admin-add-menu-panel" class="mt-3">
+                    <h4>📝 登錄新客棧佳餚：</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                        <input type="text" id="new-menu-restaurant" placeholder="客棧名稱 (如: 龍門客棧)" style="flex: 1; min-width: 140px;">
+                        <input type="text" id="new-menu-name" placeholder="佳餚名稱 (如: 叫化雞)" style="flex: 1; min-width: 140px;">
+                        <input type="number" id="new-menu-price" placeholder="耗費銀兩 (如: 150)" style="flex: 1; min-width: 120px;">
+                        <input type="text" id="new-menu-category" placeholder="種類 (如: 主食)" style="flex: 1; min-width: 100px;">
+                    </div>
+                    <button id="btn-add-menu-item" class="btn btn-secondary">登錄新佳餚</button>
+                </div>
+
+                <hr style="border:0; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
                 <div id="admin-config-panel" class="mt-3">
                     <h4>欽定今日開伙客棧：</h4>
                     <div id="restaurant-checkboxes" class="checkbox-group">

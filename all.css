@@ -24,11 +24,15 @@
 }
 
 body {
-    font-family: 'Noto Serif TC', "標楷體", serif;
+    font-family: "標楷體", "BiauKai", "Kaiti TC", "KaiTi", "TW-Kai", serif;
     background-color: var(--bg-color);
     background-image: 
+        url('./assets/ink.png'),
         radial-gradient(at 0% 0%, rgba(120, 143, 156, 0.08) 0px, transparent 50%),
         radial-gradient(at 100% 100%, rgba(39, 65, 86, 0.05) 0px, transparent 70%);
+    background-size: cover, auto, auto;
+    background-position: center center;
+    background-blend-mode: multiply, normal, normal;
     background-attachment: fixed;
     color: var(--text-color);
     margin: 0;
@@ -64,12 +68,21 @@ h1 {
     letter-spacing: 2px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    position: relative;
+    padding-left: 50px;
 }
 
 h1::before {
-    /* 移除 emoji 設定，HTML 中已改文字，或加個細緻點綴 */
     content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(-8deg); /* 傾斜的印章效果 */
+    width: 40px;
+    height: 40px;
+    background: url('./assets/seal.png') no-repeat center center;
+    background-size: contain;
+    mix-blend-mode: multiply;
 }
 
 h2 {
@@ -80,6 +93,22 @@ h2 {
     border-bottom: 2px solid var(--primary-color);
     padding-bottom: 8px;
     display: inline-block;
+    position: relative;
+    padding-left: 45px;
+}
+
+h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-60%) rotate(5deg);
+    width: 32px;
+    height: 32px;
+    background: url('./assets/seal.png') no-repeat center center;
+    background-size: contain;
+    mix-blend-mode: multiply;
+    opacity: 0.85;
 }
 
 h3, h4 {
@@ -133,6 +162,27 @@ h3, h4 {
     font-size: 2.2rem;
     color: var(--primary-color);
     border-bottom: none;
+    padding-left: 0; /* 登入頁置中，不使用左側印章 */
+}
+
+.login-card h2::before {
+    display: none; /* 隱藏共用印章 */
+}
+
+/* 在登入頁加入一個大印章作為視覺焦點 */
+.login-card::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    background: url('./assets/seal.png') no-repeat center center;
+    background-size: contain;
+    mix-blend-mode: multiply;
+    opacity: 0.15;
+    transform: rotate(15deg);
+    pointer-events: none;
 }
 
 .login-card p {
@@ -514,7 +564,7 @@ tr:hover td {
 .custom-google-btn {
     display: inline-flex;
     align-items: center;
-    background-color: white;
+    background-color: var(--card-bg);
     color: var(--text-color);
     border: 2px solid var(--primary-color);
     padding: 6px 20px 6px 6px;
@@ -524,20 +574,24 @@ tr:hover td {
     cursor: pointer;
     height: 56px;
     transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
 }
 
 .custom-google-btn:hover {
-    background: rgba(39, 65, 86, 0.05);
+    background: rgba(39, 65, 86, 0.05); /* 冷色系底蘊 */
+    border-color: var(--text-color); /* 懸停時變墨色邊框 */
 }
 
 .custom-google-btn .icon {
-    background: url('https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA') no-repeat center center;
-    background-size: 24px;
-    background-color: white;
+    background: url('./assets/seal.png') no-repeat center center;
+    background-size: 32px;
+    background-color: transparent;
     width: 44px;
     height: 44px;
     display: inline-block;
-    border: 1px solid var(--border-color);
+    border-right: 1px dashed var(--border-color); /* 仿古書簡分隔 */
+    margin-right: 8px;
 }
 
 .custom-google-btn .text {

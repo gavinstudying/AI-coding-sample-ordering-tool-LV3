@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>公司內部點餐工具</title>
+    <title>客棧點膳系統</title>
     <link rel="stylesheet" href="all.css">
+    <!-- Google Fonts for Classical Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&display=swap" rel="stylesheet">
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -14,20 +16,20 @@
 
     <div class="container">
         <header>
-            <h1>公司點餐系統</h1>
+            <h1>客棧點膳系統</h1>
             <div id="user-info" class="hidden">
                 <span id="user-name"></span>
-                <button id="sign-out-btn" class="btn btn-outline">登出</button>
+                <button id="sign-out-btn" class="btn btn-outline">告辭</button>
             </div>
         </header>
         <!-- 登入區塊 -->
         <section id="login-section">
             <div class="card login-card">
-                <h2>請先登入</h2>
-                <p>使用公司 Google 帳號登入以進行點餐</p>
+                <h2>客倌請留步</h2>
+                <p>請出示通關玉牌（Google 帳號）以入內用膳</p>
                 <button id="custom-login-btn" class="custom-google-btn">
                     <span class="icon"></span>
-                    <span class="text">使用 Google 帳號登入</span>
+                    <span class="text">持玉牌入內</span>
                 </button>
             </div>
         </section>
@@ -35,7 +37,7 @@
         <!-- 載入中 / 狀態提示 -->
         <section id="status-section" class="hidden">
             <div class="loader"></div>
-            <p id="status-text">載入中...</p>
+            <p id="status-text">掌櫃核算中...</p>
         </section>
 
         <!-- 主應用程式區塊 (需登入且有權限) -->
@@ -43,25 +45,25 @@
 
             <!-- 管理員設定區塊 (僅管理員可見) -->
             <section id="admin-section" class="card hidden">
-                <h3>📢 管理員公告</h3>
+                <h3>📜 掌櫃告示</h3>
                 <div class="admin-controls">
-                    <button id="btn-clear-orders" class="btn btn-danger">清空今日點餐</button>
+                    <button id="btn-clear-orders" class="btn btn-danger">銷毀今日帳冊</button>
                 </div>
                 <div id="admin-config-panel" class="mt-3">
-                    <h4>選擇今日開放餐廳：</h4>
+                    <h4>欽定今日開伙客棧：</h4>
                     <div id="restaurant-checkboxes" class="checkbox-group">
-                        <p class="placeholder-text">載入中...</p>
+                        <p class="placeholder-text">飛鴿傳書中...</p>
                     </div>
-                    <button id="btn-save-config" class="btn btn-primary mt-2">儲存設定</button>
+                    <button id="btn-save-config" class="btn btn-primary mt-2">封存設定</button>
                 </div>
             </section>
 
             <!-- 今日菜單區塊 -->
             <section id="menu-section">
-                <h2>🍽️ 今日特餐 <span id="today-restaurants"></span></h2>
+                <h2>🥢 今日推薦佳餚 <span id="today-restaurants"></span></h2>
                 <div id="menu-container" class="grid-container">
                     <!-- JS 動態生成餐點卡片 -->
-                    <p class="placeholder-text">今日尚未設定餐廳或菜單載入中...</p>
+                    <p class="placeholder-text">今日尚未開伙或菜單傳遞中...</p>
                 </div>
             </section>
         </main>
@@ -69,7 +71,7 @@
         <!-- 訂單確認浮動視窗 / 底部區塊 -->
         <section id="order-summary-section" class="hidden">
             <!-- 用於顯示簡易結算或複製按鈕，可視需求擴充 -->
-            <button id="btn-show-orders" class="btn btn-info">查看今日訂單總覽</button>
+            <button id="btn-show-orders" class="btn btn-info">翻閱帳本總覽</button>
         </section>
 
     </div>
@@ -79,7 +81,7 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             
-            <h2>📊 今日訂單統計</h2>
+            <h2>🧮 總計帳房</h2>
             <div class="table-wrapper" style="margin-bottom: 30px;">
                 <table id="orders-summary-table">
                     <thead>
@@ -96,17 +98,17 @@
                 </table>
             </div>
 
-            <h2>🧾 今日訂單列表</h2>
+            <h2>📜 點膳紀錄圖卷</h2>
             <div class="table-wrapper">
                 <table id="orders-table">
                     <thead>
                         <tr>
-                            <th>時間</th>
-                            <th>訂購人</th>
-                            <th>餐廳</th>
-                            <th>餐點</th>
-                            <th>金額</th>
-                            <th>備註</th>
+                            <th>時辰</th>
+                            <th>客倌</th>
+                            <th>客棧</th>
+                            <th>佳餚</th>
+                            <th>銀兩</th>
+                            <th>客製要求</th>
                         </tr>
                     </thead>
                     <tbody id="orders-list">
@@ -115,8 +117,8 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <p>總金額: <span id="total-amount">0</span> 元</p>
-                <button id="btn-copy-orders" class="btn btn-success">複製訂單文字 (Line)</button>
+                <p>總計銀兩: <span id="total-amount">0</span> 兩</p>
+                <button id="btn-copy-orders" class="btn btn-success">抄錄帳冊 (Line)</button>
             </div>
         </div>
     </div>
